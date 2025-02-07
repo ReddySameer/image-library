@@ -12,14 +12,7 @@ import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 @Service
 public class AwsKinesisClient {
 
-	//private static final String AWS_ACCESS_KEY="aws.accessKeyId";
-	//private static final String AWS_SECRET_KEY="aws.secretKey";
-
 	
-	static {
-	//	System.setProperty(AWS_ACCESS_KEY, "AKIAQ4J5X2AKAW56CZM3");
-	//	System.setProperty(AWS_SECRET_KEY, "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");
-	}
 	@Bean
 	public static AmazonKinesis getAWSKinesisClient() {
 		
