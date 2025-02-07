@@ -12,11 +12,18 @@ import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 @Service
 public class AwsKinesisClient {
 
+	//private static final String AWS_ACCESS_KEY="aws.accessKeyId";
+	//private static final String AWS_SECRET_KEY="aws.secretKey";
+
 	
+	static {
+		System.setProperty(AWS_ACCESS_KEY, "");
+		System.setProperty(AWS_SECRET_KEY, "");
+	}
 	@Bean
 	public static AmazonKinesis getAWSKinesisClient() {
 		
-		BasicAWSCredentials awsCredentials = new BasicAWSCredentials("AKIAQ4J5X2AKAW56CZM3", "O7/YB6NFKKPWU3WLWx3zJ0u6LQEVZi/a7o7WauGi");
+		BasicAWSCredentials awsCredentials = new BasicAWSCredentials("", "");
 	    return AmazonKinesisClientBuilder.standard()
 	      .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
 	      .withRegion(Regions.US_EAST_1)
