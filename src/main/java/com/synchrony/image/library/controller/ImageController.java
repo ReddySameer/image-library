@@ -1,6 +1,7 @@
 package com.synchrony.image.library.controller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.synchrony.image.library.service.UserService;
 @RequestMapping("/image")
 public class ImageController {
 
+	private static String URI_CONTEXT = "/image";
 	@Autowired
 	UserService userService;
 	
@@ -35,15 +37,15 @@ public class ImageController {
 		if(savedUser == null) {
 			return ResponseEntity.internalServerError().body("Could not create/Add User");
 		}
-		
-		return ResponseEntity.ok(savedUser);
+		URI uri = URI.create(URI_CONTEXT + "/" + user.getId());
+		return ResponseEntity.created(uri).body(savedUser);
 	}
 	
 	@GetMapping("/user/{id}")
 	public ResponseEntity<?> getUser(@PathVariable Long id) {
 		User foundUser = userService.getUser(id);
 		if(foundUser == null) {
-			return ResponseEntity.notFound().build().of(Optional.of("User with Id:" + id + "could not be found"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with Id:" + id + "could not be found");
 		}
 		return ResponseEntity.ok(foundUser);
 	}
@@ -52,7 +54,7 @@ public class ImageController {
 	public ResponseEntity<?> getByUserName(@PathVariable String userName) {
 		User foundUser = userService.findUserByUserName(userName);
 		if(foundUser == null) {
-			return ResponseEntity.notFound().build().of(Optional.of("User with user_name:" + userName + "could not be found"));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with user_name:" + userName + "could not be found");
 		}
 		return ResponseEntity.ok(foundUser);
 	}
@@ -71,17 +73,16 @@ public class ImageController {
 		}
 		User user = userService.findUserByUserName(userName);
 		if(user==null) {
-			ResponseEntity.badRequest().body("User could not be found for the given userName");
+			return ResponseEntity.badRequest().body("User could not be found for the given userName");
 		}
 			
-		if(!user.getPassword().equals(password)) {
-			ResponseEntity.badRequest().body("Invalid Password");
+		if(user != null && !user.getPassword().equals(password)) {
+			return ResponseEntity.badRequest().body("Invalid Password");
 		}
 		try {
 			userService.addImage(user, imageFile, imageName);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseEntity.internalServerError().body("Failed to upload the image to Imgur");
 		}
 		return  ResponseEntity.status(HttpStatus.ACCEPTED).body("Image Loaded successfully");
 	}

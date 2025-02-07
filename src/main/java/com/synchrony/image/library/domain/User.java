@@ -1,5 +1,6 @@
 package com.synchrony.image.library.domain;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class User {
 	private String password;
 	@Column
 	@OneToMany(mappedBy="user",  cascade = CascadeType.ALL)
-	private Set<UserImage> images;
+	private List<UserImage> images;
 	
 	public Long getId() {
 		return id;
@@ -70,14 +71,11 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Set<UserImage> getImages() {
+	public List<UserImage> getImages() {
 		return images;
 	}
-	public void setImages(Set<UserImage> images) {
+	public void setImages(List<UserImage> images) {
 		this.images = images;
 	}
-	
-	
-	
-	
+
 }

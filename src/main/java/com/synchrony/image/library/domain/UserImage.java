@@ -23,7 +23,10 @@ public class UserImage {
 	User user;
 	
 	@Column
-	String image;
+	String imageName;
+	
+	@Column
+	String imageHash;
 
 
 	public Long getImageId() {
@@ -42,12 +45,20 @@ public class UserImage {
 		this.user = user;
 	}
 
-	public String getImage() {
-		return image;
+	public String getImageName() {
+		return imageName;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+	public String getImageHash() {
+		return imageHash;
+	}
+
+	public void setImageHash(String imageHash) {
+		this.imageHash = imageHash;
 	}
 	
 	
