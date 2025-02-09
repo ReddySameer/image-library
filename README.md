@@ -9,5 +9,7 @@ Allows to:
 7.   b. name it as "user-image"
 8.   c. in the class AmazonKinesisClient:
 9.     i. update the credentials line 28, withthe secretkey and secretPWD
+10.  For Oauth:
+    a. need to fetch the Ouath Token at Oauth0 : manage.oauth0.com ( I can provide at the time of testing)
 
    
