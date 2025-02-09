@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class ImageController {
 	UserService userService;
 	
 	@PostMapping("/user")
+	@PreAuthorize("hasAuthority('SCOPE_add-user-images')")
 	public ResponseEntity<?> addUser(@RequestBody User user) {
 		User savedUser =  userService.addUser(user);
 		
@@ -42,6 +44,7 @@ public class ImageController {
 	}
 	
 	@GetMapping("/user/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_get')")
 	public ResponseEntity<?> getUser(@PathVariable Long id) {
 		User foundUser = userService.getUser(id);
 		if(foundUser == null) {
@@ -51,6 +54,7 @@ public class ImageController {
 	}
 	
 	@GetMapping("/user/username/{userName}")
+	@PreAuthorize("hasAuthority('SCOPE_get')")
 	public ResponseEntity<?> getByUserName(@PathVariable String userName) {
 		User foundUser = userService.findUserByUserName(userName);
 		if(foundUser == null) {
@@ -60,6 +64,7 @@ public class ImageController {
 	}
 	
 	@PostMapping(value="/user/image", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PreAuthorize("hasAuthority('SCOPE_add-user-images')")
 	public ResponseEntity<?> uploadImage(
 			@RequestHeader("ImageName") String imageName,
 			@RequestHeader("UserName") String userName,

@@ -12,3 +12,10 @@ spring:
   h2: 
     console:
       enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-kmvjpaqa2nvf0dyq.us.auth0.com/
+          audiences: https://image-library
+         

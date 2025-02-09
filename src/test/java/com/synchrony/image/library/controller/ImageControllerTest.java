@@ -59,6 +59,7 @@ public class ImageControllerTest {
 		headers.add("UserName", "UserName");
 		headers.add("Password", "Password");
 		headers.add("description", "some file uploaded");
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		
 		String requestBody = objectMapper.writeValueAsString(user);
 		mockMvc.perform(post(END_POINT_PATH)
@@ -81,6 +82,7 @@ public class ImageControllerTest {
 		headers.add("UserName", "UserName");
 		headers.add("Password", "Password");
 		headers.add("description", "some file uploaded");
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		
 		String requestBody = objectMapper.writeValueAsString(user);
 		mockMvc.perform(post(END_POINT_PATH)
@@ -94,8 +96,12 @@ public class ImageControllerTest {
 	@Test
 	public void getUserTest() throws Exception  {
 		User user = createTestUser();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		Mockito.when(userService.getUser(any(Long.class))).thenReturn(user);
-		mockMvc.perform(get(END_POINT_PATH + "/1"))
+		mockMvc.perform(get(END_POINT_PATH + "/1")
+				.headers(headers))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
 				.andExpect(jsonPath("$.firstName").value("SomeFirstName"))
@@ -105,8 +111,12 @@ public class ImageControllerTest {
 	@Test
 	public void getUserTest_UserNotFound() throws Exception  {
 		User user = createTestUser();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		Mockito.when(userService.getUser(any(Long.class))).thenReturn(null);
-		mockMvc.perform(get(END_POINT_PATH + "/1"))
+		mockMvc.perform(get(END_POINT_PATH + "/1")
+				.headers(headers))
 				.andExpect(status().isNotFound())
 				.andDo(print());	
 	}
@@ -114,8 +124,12 @@ public class ImageControllerTest {
 	@Test
 	public void getUserByUserNameTest() throws Exception  {
 		User user = createTestUser();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		Mockito.when(userService.findUserByUserName(any(String.class))).thenReturn(user);
-		mockMvc.perform(get(END_POINT_PATH + "/username/username"))
+		mockMvc.perform(get(END_POINT_PATH + "/username/username")
+				.headers(headers))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
 				.andExpect(jsonPath("$.firstName").value("SomeFirstName"))
@@ -125,8 +139,12 @@ public class ImageControllerTest {
 	@Test
 	public void getUserByUserNameTest_UserNotFound() throws Exception  {
 		User user = createTestUser();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		Mockito.when(userService.findUserByUserName(any(String.class))).thenReturn(null);
-		mockMvc.perform(get(END_POINT_PATH + "/username/username"))
+		mockMvc.perform(get(END_POINT_PATH + "/username/username")
+				.headers(headers))
 				.andExpect(status().isNotFound())
 				.andDo(print());	
 	}
@@ -141,6 +159,7 @@ public class ImageControllerTest {
 		headers.add("UserName", "UserName");
 		headers.add("Password", "somePassword");
 		headers.add("description", "some file uploaded");
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		
         byte[] content = "Hello World".getBytes();
         String fileName = "test.txt";
@@ -169,6 +188,7 @@ public class ImageControllerTest {
 		headers.add("UserName", "UserName");
 		headers.add("Password", "somePassword");
 		headers.add("description", "some file uploaded");
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		
         byte[] content = "Hello World".getBytes();
         String fileName = "test.txt";
@@ -197,6 +217,7 @@ public class ImageControllerTest {
 		headers.add("UserName", "UserName");
 		headers.add("Password", "Password");
 		headers.add("description", "some file uploaded");
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		
         byte[] content = "Hello World".getBytes();
         String fileName = "test.txt";
@@ -225,6 +246,7 @@ public class ImageControllerTest {
 		headers.add("UserName", "UserName");
 		headers.add("Password", "Password");
 		headers.add("description", "some file uploaded");
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		
         byte[] content = "Hello World".getBytes();
         String fileName = "test.txt";
@@ -253,6 +275,7 @@ public class ImageControllerTest {
 		headers.add("UserName", "UserName");
 		headers.add("Password", "Password");
 		headers.add("description", "some file uploaded");
+		headers.add(HttpHeaders.AUTHORIZATION, "BEARER " + accessToken());
 		
         byte[] content = "Hello World".getBytes();
         String fileName = "test.txt";
@@ -284,5 +307,13 @@ public class ImageControllerTest {
 		userImages.add(userImage);
 		user.setImages(userImages);
 		return user;
+	}
+	
+	private String accessToken() {
+
+		return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Im16N0ktbUxTQ181UlAyMV83QzJmbSJ9.eyJpc3MiOiJodHRwczovL2Rldi1rbXZqcGFxYTJudmYwZHlxLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJvSjRsNjJ6Q2lheGxNV2ZFTFl3dVkwNjlmSmhONkpXVkBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9pbWFnZS1saWJyYXJ5IiwiaWF0IjoxNzM5MDQ1Nzc4LCJleHAiOjE3MzkxMzIxNzgsInNjb3BlIjoiZ2V0IGFkZC11c2VyLWltYWdlcyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6Im9KNGw2MnpDaWF4bE1XZkVMWXd1WTA2OWZKaE42SldWIn0.Awr6W2tBXy_Jej9wsdUojhQwQKlMsNSvwdYsBBehZsc6N-ZiDpXbyVT7MCdKKVwnYOvGMn8QheG3-wnGL7QR-1wE87CMkuP28W04v76Fo0nhTSqkrEt2Q6m36MURWK5RTDLMsu4xphCusRTz6AS94MBzMLgAhFyvEsIn9664YXiWFQjNr2hpqOFSgbLECX_zaYiU-Bb5lfTIuPu03fiWQpw2zstdvc9Yi1ao94xxW-CkdkFsfl6BZ1q3cNmUNIJgNpd0RrdPDuWhDimMEbahA-lZBlicVLHl7SbuZuZoEt39EVJkzdMl8YxYPR9txtMa31iJm0brb5Fh1xoB-YR11w";
+		//return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Im16N0ktbUxTQ181UlAyMV83QzJmbSJ9.eyJpc3MiOiJodHRwczovL2Rldi1rbXZqcGFxYTJudmYwZHlxLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJvSjRsNjJ6Q2lheGxNV2ZFTFl3dVkwNjlmSmhONkpXVkBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9pbWFnZS1saWJyYXJ5IiwiaWF0IjoxNzM5MDM0ODY0LCJleHAiOjE3MzkxMjEyNjQsInNjb3BlIjoiZ2V0IGFkZC11c2VyLWltYWdlcyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6Im9KNGw2MnpDaWF4bE1XZkVMWXd1WTA2OWZKaE42SldWIn0.R0mev4aSjkGdPAxedpf7erKszsAlNlOEwxHsdDgtuNcB1o9Dtt_ZyDgbx4lIjfY4rfxXOvfPf6_XW2bLxDE5B8wQMKFAJJh83vTgS-W3k7_hu76-JvQSsXexOzkcwjZty1tu8Oqsrr56L8ghsMFyKJqqz6pV2yy4EWrT62Y4AByIxNqVnujNt8O39H0ioEW6aiI8a9vMgH_kyjIFvX-hRkC9-qK09_GA265b9QAe3tCjyqbRmycbZG-s9O4dRP94kOeO9KW2e0aqaRzIHMCObiE2uXFikxvltYWfr1z-aty4MbGDJcNCJSSAOMT2O2ps_9pbG1In7uXZQCn5rwtpVA";
+		
+		
 	}
 }
